@@ -1,0 +1,33 @@
+pipeli{
+  agent {
+    docker {
+      image 'node:8.16.0-alpine'
+    }
+  }
+
+  stages {
+    stage('Build'){
+      when {
+        changeset "result/**"
+      }
+      steps {
+        echo 'Building result app'
+        dir('result') {
+          sh 'npm install'
+        }
+      }
+    }
+    
+    stage('Test') {
+      when {
+        changeset "result/**"
+      }
+      steps {
+        echo 'Running unit tests'
+        dir('result') {
+          sh 'npm test'
+        }
+      }
+    }
+  }
+}
